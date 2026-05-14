@@ -1,0 +1,1 @@
+{"default":{"identifier":"default","description":"Default Aurora capability — allows IPC and local HTTP","local":true,"windows":["main"],"permissions":["core:default"]}}

@@ -31,7 +31,7 @@ export function ChatInput({ value, onChange, onSubmit, disabled }: Props) {
         value={value}
         onChange={(e) => onChange(e.target.value)}
         onKeyDown={handleKeyDown}
-        placeholder={disabled ? "Aurora is thinking..." : "Type a message... (Enter to send, Shift+Enter for new line)"}
+        placeholder={disabled ? "Aurora está pensando..." : "Digite uma mensagem... (Enter envia · Shift+Enter nova linha)"}
         disabled={disabled}
         rows={1}
       />

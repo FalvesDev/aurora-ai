@@ -15,30 +15,25 @@ export function Chat({ messages, isThinking }: Props) {
     bottomRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages, isThinking]);
 
+  const lastIndex = messages.length - 1;
+
   return (
     <div className="chat">
       {messages.length === 0 && (
-        <div className="chat__empty boot-in">
-          <p className="chat__empty-text">
-            <span className="chat__prompt">AURORA</span>
-            {" "}Disc loaded. I'm here.
-            <span className="cursor" />
+        <div className="chat__welcome">
+          <p className="chat__welcome-line">
+            AURORA &gt; Disco carregado. Estou aqui.<span className="msg__cursor">█</span>
           </p>
         </div>
       )}
 
-      {messages.map((msg) => (
-        <MessageBubble key={msg.id} message={msg} />
+      {messages.map((msg, i) => (
+        <MessageBubble
+          key={msg.id}
+          message={msg}
+          isStreaming={isThinking && i === lastIndex}
+        />
       ))}
-
-      {isThinking && (
-        <div className="chat__thinking boot-in">
-          <span className="chat__prompt">AURORA</span>
-          <span className="chat__thinking-dots">
-            <span>.</span><span>.</span><span>.</span>
-          </span>
-        </div>
-      )}
 
       <div ref={bottomRef} />
     </div>
