@@ -1,56 +1,65 @@
 .dvd-status {
   display: flex;
   align-items: center;
-  gap: 0.6rem;
-  padding: 0.4rem 0.8rem;
+  gap: .55rem;
+  padding: .3rem .75rem;
   border: 1px solid var(--color-border);
   background: var(--color-surface);
-  font-size: 0.75rem;
-  letter-spacing: 0.08em;
+  font-size: .72rem;
+  letter-spacing: .07em;
 }
 
 .dvd-status__disc {
   color: var(--color-primary);
-  width: 20px;
-  height: 20px;
+  width: 18px; height: 18px;
   flex-shrink: 0;
+  filter: drop-shadow(0 0 4px rgba(0,255,65,.5));
+  animation: disc-spin 8s linear infinite;
+}
+
+@keyframes disc-spin {
+  from { transform: rotate(0deg); }
+  to   { transform: rotate(360deg); }
 }
 
 .dvd-status__info {
   display: flex;
   flex-direction: column;
-  gap: 0.1rem;
+  gap: .08rem;
   line-height: 1;
 }
 
 .dvd-status__label {
+  font-size: .6rem;
+  letter-spacing: .18em;
   color: var(--color-dim);
-  font-size: 0.65rem;
-  letter-spacing: 0.15em;
+  text-transform: uppercase;
 }
 
 .dvd-status__name {
-  color: var(--color-primary);
   font-weight: 700;
-  font-size: 0.85rem;
+  font-size: .82rem;
+  color: var(--color-primary);
+  text-shadow: var(--text-glow);
 }
 
 .dvd-status__model {
   color: var(--color-dim);
-  font-size: 0.7rem;
+  font-size: .65rem;
   margin-left: auto;
+  opacity: .75;
 }
 
 .dvd-status__dot {
-  width: 6px;
-  height: 6px;
+  width: 5px; height: 5px;
   border-radius: 50%;
   background: var(--color-primary);
   box-shadow: var(--glow);
-  animation: pulse 2s ease-in-out infinite;
+  animation: live-pulse 1.8s ease-in-out infinite;
+  flex-shrink: 0;
 }
 
-@keyframes pulse {
-  0%, 100% { opacity: 1; }
-  50% { opacity: 0.4; }
+@keyframes live-pulse {
+  0%, 100% { opacity: 1;   transform: scale(1);   }
+  50%       { opacity: .4;  transform: scale(.8);  }
 }

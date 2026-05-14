@@ -1,137 +1,207 @@
-@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,400;0,700;1,400&display=swap');
 
+/* ─────────────────────────────────────────
+   TOKENS
+───────────────────────────────────────── */
 :root {
-  --color-bg: #0D0D0D;
-  --color-primary: #00FF41;
+  --color-bg:        #080808;
+  --color-primary:   #00FF41;
   --color-secondary: #00CC33;
-  --color-dim: #006614;
-  --color-accent: #00FF41;
-  --color-text: #00FF41;
-  --color-muted: #1a4a1a;
-  --color-surface: #0a1a0a;
-  --color-border: #003300;
+  --color-dim:       #007718;
+  --color-muted:     #003d0c;
+  --color-surface:   #040f04;
+  --color-border:    #002200;
   --font-mono: 'JetBrains Mono', 'Courier New', monospace;
-  --glow: 0 0 8px rgba(0, 255, 65, 0.6);
-  --glow-strong: 0 0 16px rgba(0, 255, 65, 0.8), 0 0 32px rgba(0, 255, 65, 0.3);
-  --scanline-opacity: 0.04;
+
+  --glow:        0 0 6px rgba(0,255,65,.55), 0 0 12px rgba(0,255,65,.2);
+  --glow-strong: 0 0 8px rgba(0,255,65,.9), 0 0 24px rgba(0,255,65,.4), 0 0 48px rgba(0,255,65,.15);
+  --text-glow:   0 0 4px rgba(0,255,65,.5);
 }
 
-/* Per-skill theme overrides — applied on body */
 body[data-skill="dev"] {
-  --color-primary: #00FF41;
+  --color-primary:   #00FF41;
   --color-secondary: #00CC33;
-  --color-dim: #006614;
-  --color-surface: #0a1a0a;
-  --color-border: #003300;
-  --glow: 0 0 8px rgba(0, 255, 65, 0.6);
+  --color-dim:       #007718;
+  --color-muted:     #003d0c;
+  --color-surface:   #040f04;
+  --color-border:    #002200;
+  --glow: 0 0 6px rgba(0,255,65,.55), 0 0 12px rgba(0,255,65,.2);
+  --text-glow: 0 0 4px rgba(0,255,65,.5);
 }
 
 body[data-skill="mentor"] {
-  --color-primary: #00BFFF;
-  --color-secondary: #0088CC;
-  --color-dim: #003366;
-  --color-surface: #020510;
-  --color-border: #001133;
-  --glow: 0 0 8px rgba(0, 191, 255, 0.6);
+  --color-primary:   #00CFFF;
+  --color-secondary: #009ACC;
+  --color-dim:       #004466;
+  --color-muted:     #001e2e;
+  --color-surface:   #010810;
+  --color-border:    #001122;
+  --glow: 0 0 6px rgba(0,207,255,.55), 0 0 12px rgba(0,207,255,.2);
+  --text-glow: 0 0 4px rgba(0,207,255,.5);
 }
 
 body[data-skill="companion"] {
-  --color-primary: #FFB000;
+  --color-primary:   #FFB300;
   --color-secondary: #CC8800;
-  --color-dim: #664400;
-  --color-surface: #100800;
-  --color-border: #331a00;
-  --glow: 0 0 8px rgba(255, 176, 0, 0.6);
+  --color-dim:       #664800;
+  --color-muted:     #2e2000;
+  --color-surface:   #100800;
+  --color-border:    #2a1800;
+  --glow: 0 0 6px rgba(255,179,0,.55), 0 0 12px rgba(255,179,0,.2);
+  --text-glow: 0 0 4px rgba(255,179,0,.5);
 }
 
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-}
+/* ─────────────────────────────────────────
+   BASE
+───────────────────────────────────────── */
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
 
-html, body, #root {
-  width: 100%;
-  height: 100%;
-  overflow: hidden;
-  background: var(--color-bg);
-  color: var(--color-primary);
-  font-family: var(--font-mono);
-  font-size: 14px;
-  line-height: 1.6;
-}
-
-/* CRT scanlines overlay */
-body::after {
-  content: '';
-  position: fixed;
-  inset: 0;
-  background: repeating-linear-gradient(
-    to bottom,
-    transparent 0px,
-    transparent 2px,
-    rgba(0, 0, 0, var(--scanline-opacity)) 2px,
-    rgba(0, 0, 0, var(--scanline-opacity)) 4px
-  );
-  pointer-events: none;
-  z-index: 9999;
-}
-
-/* CRT screen flicker — very subtle */
-@keyframes flicker {
-  0%, 95%, 100% { opacity: 1; }
-  96% { opacity: 0.98; }
-  97% { opacity: 1; }
-  98% { opacity: 0.97; }
+html {
+  width: 100%; height: 100%;
+  background: #000;
 }
 
 body {
-  animation: flicker 8s infinite;
+  width: 100%; height: 100%;
+  background: #020202;
+  font-family: var(--font-mono);
+  font-size: 14px;
+  line-height: 1.65;
+  color: var(--color-primary);
+  overflow: hidden;
 }
 
-/* Blinking cursor */
-@keyframes blink {
-  0%, 50% { opacity: 1; }
-  51%, 100% { opacity: 0; }
+#root {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  background: var(--color-bg);
+  overflow: hidden;
+
+  /* Phosphor inner glow */
+  box-shadow:
+    inset 0 0 80px rgba(0, 0, 0, .6),
+    inset 0 0 4px rgba(0, 255, 65, .04);
+
+  /* Subtle CRT screen curvature */
+  transform: perspective(1200px) rotateX(0.4deg);
+}
+
+/* ─────────────────────────────────────────
+   CRT OVERLAYS  (pointer-events:none, above everything)
+───────────────────────────────────────── */
+
+/* 1. Scanlines */
+#root::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  z-index: 9000;
+  pointer-events: none;
+  background: repeating-linear-gradient(
+    to bottom,
+    transparent         0px,
+    transparent         2px,
+    rgba(0,0,0,.18)     2px,
+    rgba(0,0,0,.18)     4px
+  );
+  /* slow scan drift */
+  animation: scanlines-drift 12s linear infinite;
+}
+
+@keyframes scanlines-drift {
+  from { background-position: 0 0;   }
+  to   { background-position: 0 4px; }
+}
+
+/* 2. Vignette */
+#root::after {
+  content: '';
+  position: fixed;
+  inset: 0;
+  z-index: 9001;
+  pointer-events: none;
+  background: radial-gradient(
+    ellipse at 50% 48%,
+    transparent       45%,
+    rgba(0,0,0,.50)   75%,
+    rgba(0,0,0,.82)  100%
+  );
+}
+
+/* 3. Moving bright scanline (the "refresh" line) */
+body::before {
+  content: '';
+  position: fixed;
+  left: 0; right: 0;
+  height: 3px;
+  z-index: 9002;
+  pointer-events: none;
+  background: linear-gradient(
+    to bottom,
+    transparent,
+    rgba(255,255,255,.04) 50%,
+    transparent
+  );
+  animation: scanline-sweep 7s linear infinite;
+}
+
+@keyframes scanline-sweep {
+  0%   { top: -3px;   opacity: 0; }
+  2%   { opacity: 1; }
+  98%  { opacity: 1; }
+  100% { top: 100vh;  opacity: 0; }
+}
+
+/* 4. Screen flicker */
+@keyframes crt-flicker {
+  0%, 91%, 94%, 100% { opacity: 1;    }
+  92%                { opacity: .97;  }
+  93%                { opacity: 1;    }
+}
+
+#root { animation: crt-flicker 9s ease-in-out infinite; }
+
+/* ─────────────────────────────────────────
+   TYPOGRAPHY GLOW
+───────────────────────────────────────── */
+.glow       { text-shadow: var(--glow); }
+.glow-strong{ text-shadow: var(--glow-strong); }
+
+/* ─────────────────────────────────────────
+   BLOCK CURSOR
+───────────────────────────────────────── */
+@keyframes block-blink {
+  0%,49% { opacity: 1; }
+  50%,100%{ opacity: 0; }
 }
 
 .cursor {
   display: inline-block;
-  width: 0.6ch;
-  height: 1.2em;
+  width: .55ch; height: 1.1em;
   background: var(--color-primary);
   vertical-align: text-bottom;
-  animation: blink 1s step-end infinite;
   box-shadow: var(--glow);
+  animation: block-blink 1s step-end infinite;
 }
 
-/* Glow text */
-.glow {
-  text-shadow: var(--glow);
-}
-
-.glow-strong {
-  text-shadow: var(--glow-strong);
-}
-
-/* Scrollbar */
-::-webkit-scrollbar { width: 4px; }
+/* ─────────────────────────────────────────
+   SCROLLBAR
+───────────────────────────────────────── */
+::-webkit-scrollbar       { width: 3px; }
 ::-webkit-scrollbar-track { background: var(--color-bg); }
 ::-webkit-scrollbar-thumb { background: var(--color-dim); }
-::-webkit-scrollbar-thumb:hover { background: var(--color-secondary); }
 
-/* Selection */
-::selection {
-  background: var(--color-dim);
-  color: var(--color-primary);
-}
+/* ─────────────────────────────────────────
+   SELECTION
+───────────────────────────────────────── */
+::selection { background: var(--color-dim); color: var(--color-primary); }
 
-/* Boot animation */
+/* ─────────────────────────────────────────
+   BOOT ANIMATION
+───────────────────────────────────────── */
 @keyframes boot-in {
-  from { opacity: 0; transform: translateY(4px); }
+  from { opacity: 0; transform: translateY(6px); }
   to   { opacity: 1; transform: translateY(0); }
 }
-
-.boot-in {
-  animation: boot-in 0.3s ease-out forwards;
-}
+.boot-in { animation: boot-in .25s ease-out both; }
