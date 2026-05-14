@@ -1,0 +1,9 @@
+{
+  "$schema": "../gen/schemas/desktop-schema.json",
+  "identifier": "default",
+  "description": "Default Aurora capability — allows IPC and local HTTP",
+  "windows": ["main"],
+  "permissions": [
+    "core:default"
+  ]
+}

@@ -1,0 +1,49 @@
+.app {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  background: var(--color-bg);
+  overflow: hidden;
+}
+
+.app__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.5rem 1.5rem;
+  border-bottom: 1px solid var(--color-border);
+  background: var(--color-surface);
+  flex-shrink: 0;
+  gap: 1rem;
+}
+
+.app__title {
+  display: flex;
+  align-items: baseline;
+  gap: 0.6rem;
+}
+
+.app__name {
+  font-size: 1rem;
+  font-weight: 700;
+  letter-spacing: 0.25em;
+  color: var(--color-primary);
+}
+
+.app__version {
+  font-size: 0.7rem;
+  color: var(--color-dim);
+  letter-spacing: 0.1em;
+}
+
+.app__main {
+  flex: 1;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+.app__footer {
+  flex-shrink: 0;
+}
