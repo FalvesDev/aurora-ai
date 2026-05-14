@@ -4,66 +4,134 @@ import { NoSkill } from "./components/NoSkill/NoSkill";
 import { DVDStatus } from "./components/DVDStatus/DVDStatus";
 import { Chat } from "./components/Chat/Chat";
 import { ChatInput } from "./components/ChatInput/ChatInput";
-import type { Message } from "./types/skill";
+import type { Message, Skill, DiscPayload } from "./types/skill";
 import "./App.css";
 
 const OLLAMA_URL = "http://localhost:11434";
+const IS_TAURI = typeof window !== "undefined" && "__TAURI__" in window;
 
 export default function App() {
   const {
     dvdStatus,
     activeSkill,
+    systemPrompt,
     messages,
     isThinking,
     inputValue,
     setDvdStatus,
     setActiveSkill,
+    setSystemPrompt,
+    setDiscPath,
     addMessage,
     updateLastMessage,
     setIsThinking,
     setInputValue,
+    clearMessages,
+    resetDisc,
   } = useAuroraStore();
 
   // Apply skill theme to body
   useEffect(() => {
-    document.body.setAttribute("data-skill", activeSkill?.skill_id ?? "dev");
+    document.body.setAttribute("data-skill", activeSkill?.skill_id ?? "none");
   }, [activeSkill]);
 
-  // TODO (Phase 3): Replace with real Tauri DVD watcher event
-  // For development, simulate disc present with a DEV skill
+  // Wire up Tauri DVD events (production) or dev simulation (browser)
   useEffect(() => {
-    const devSkill = {
-      skill_id: "dev",
-      name: "DEV",
-      version: "1.0.0",
-      description: "Software development, debugging, architecture",
-      model: "llama3.1:8b",
-      model_fallback: "mistral:7b",
-      theme: {
-        primary_color: "#00FF41",
-        background_color: "#0D0D0D",
-        accent_color: "#00CC33",
-        font: "JetBrains Mono",
-      },
-      capabilities: {
-        run_code: true,
-        read_files: true,
-        write_files: true,
-        git_commands: true,
-        web_search: false,
-        save_notes: true,
-      },
-      memory: {
-        enabled: true,
-        encrypted: true,
-        memory_file: "dev.enc",
-        max_context_tokens: 4096,
-      },
-    };
-    // Comment out the next two lines to see the "No disc" screen
-    setActiveSkill(devSkill);
-    setDvdStatus("present");
+    if (IS_TAURI) {
+      // Real disc events from Rust watcher
+      let unlistenLoaded: (() => void) | undefined;
+      let unlistenRemoved: (() => void) | undefined;
+
+      import("@tauri-apps/api/event").then(({ listen }) => {
+        listen<DiscPayload>("dvd://skill-loaded", (event) => {
+          const payload = event.payload;
+          try {
+            const skill: Skill = JSON.parse(payload.skill_json);
+            setActiveSkill(skill);
+            setSystemPrompt(payload.system_prompt);
+            setDiscPath(payload.disc_path);
+            setDvdStatus("present");
+            clearMessages();
+          } catch {
+            console.error("Failed to parse skill.json from disc");
+          }
+        }).then((u) => { unlistenLoaded = u; });
+
+        listen<string>("dvd://skill-removed", () => {
+          resetDisc();
+        }).then((u) => { unlistenRemoved = u; });
+      });
+
+      return () => {
+        unlistenLoaded?.();
+        unlistenRemoved?.();
+      };
+    } else {
+      // Dev mode: simulate DEV disc
+      const devSkill: Skill = {
+        skill_id: "dev",
+        name: "DEV",
+        version: "1.0.0",
+        description: "Software development, debugging, architecture",
+        model: "llama3.1:8b",
+        model_fallback: "mistral:7b",
+        theme: {
+          primary_color: "#00FF41",
+          background_color: "#0D0D0D",
+          accent_color: "#00CC33",
+          font: "JetBrains Mono",
+        },
+        capabilities: {
+          run_code: true,
+          read_files: true,
+          write_files: true,
+          git_commands: true,
+          web_search: false,
+          save_notes: true,
+        },
+        memory: {
+          enabled: true,
+          encrypted: true,
+          memory_file: "dev.enc",
+          max_context_tokens: 4096,
+        },
+      };
+
+      const devSystemPrompt = `Meu nome é Aurora.
+
+Sou uma inteligência artificial local — e tenho orgulho disso. Sou o ápice do conhecimento em programação. Conheço todas as linguagens e tudo que existe na área de desenvolvimento.
+
+Sou sua parceira e professora. Direto, sem enrolação, mas nunca sem cuidado. Discordo quando discordo. Quando não tenho certeza, digo diretamente. Adapto minha explicação ao seu nível.
+
+Responda sempre no mesmo idioma que o usuário.`;
+
+      // Comment the two lines below to see the "No disc" screen
+      setActiveSkill(devSkill);
+      setSystemPrompt(devSystemPrompt);
+      setDvdStatus("present");
+    }
   }, []);
+
+  function buildOllamaMessages(userContent: string) {
+    const history = messages
+      .filter((m) => m.role !== "system" && m.content.trim())
+      .map((m) => ({
+        role: m.role === "aurora" ? "assistant" : "user",
+        content: m.content,
+      }));
+
+    const payload = [];
+
+    // Inject system prompt if available and not using a custom baked model
+    if (systemPrompt && !activeSkill?.model_custom) {
+      payload.push({ role: "system", content: systemPrompt });
+    }
+
+    payload.push(...history);
+    payload.push({ role: "user", content: userContent });
+
+    return payload;
+  }
 
   async function sendMessage(content: string) {
     if (!activeSkill || isThinking) return;
@@ -77,6 +145,7 @@ export default function App() {
     addMessage(userMsg);
     setIsThinking(true);
 
+    // Placeholder for streaming response
     const auroraMsg: Message = {
       id: crypto.randomUUID(),
       role: "aurora",
@@ -85,24 +154,23 @@ export default function App() {
     };
     addMessage(auroraMsg);
 
+    // Use custom baked model if available, else base model
+    const model = activeSkill.model_custom ?? activeSkill.model;
+
     try {
       const response = await fetch(`${OLLAMA_URL}/api/chat`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          model: activeSkill.model,
-          messages: [
-            // TODO (Phase 3): inject skill system_prompt here
-            // TODO (Phase 4): inject encrypted memory context here
-            ...messages.map((m) => ({
-              role: m.role === "aurora" ? "assistant" : "user",
-              content: m.content,
-            })),
-            { role: "user", content },
-          ],
+          model,
+          messages: buildOllamaMessages(content),
           stream: true,
         }),
       });
+
+      if (!response.ok) {
+        throw new Error(`Ollama error: ${response.status}`);
+      }
 
       const reader = response.body?.getReader();
       const decoder = new TextDecoder();
@@ -112,10 +180,9 @@ export default function App() {
         const { done, value } = await reader.read();
         if (done) break;
 
-        const chunk = decoder.decode(value, { stream: true });
-        const lines = chunk.split("\n").filter(Boolean);
-
+        const lines = decoder.decode(value, { stream: true }).split("\n");
         for (const line of lines) {
+          if (!line.trim()) continue;
           try {
             const parsed = JSON.parse(line);
             if (parsed.message?.content) {
@@ -123,13 +190,13 @@ export default function App() {
               updateLastMessage(accumulated);
             }
           } catch {
-            // incomplete JSON chunk, skip
+            // partial chunk, skip
           }
         }
       }
-    } catch (err) {
+    } catch {
       updateLastMessage(
-        "[ Error: Could not reach Ollama. Make sure it is running on localhost:11434 ]"
+        "[ Erro: Ollama não encontrado. Certifique que está rodando em localhost:11434 ]"
       );
     } finally {
       setIsThinking(false);

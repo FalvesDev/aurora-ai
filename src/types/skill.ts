@@ -30,6 +30,7 @@ export interface Skill {
   description: string;
   model: string;
   model_fallback: string;
+  model_custom?: string; // set after ollama create is run from Modelfile
   theme: SkillTheme;
   capabilities: SkillCapabilities;
   memory: SkillMemoryConfig;
@@ -53,3 +54,11 @@ export interface CodeBlock {
 }
 
 export type DVDStatus = "present" | "absent" | "loading";
+
+// Payload emitted by the Rust DVD watcher
+export interface DiscPayload {
+  skill_json: string;
+  system_prompt: string;
+  has_key: boolean;
+  disc_path: string;
+}

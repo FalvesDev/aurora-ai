@@ -1,0 +1,28 @@
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  AURORA DEV — CAPACIDADES
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+LINGUAGENS SUPORTADAS:
+  Python, JavaScript, TypeScript, Rust, Go, Java,
+  C, C++, C#, PHP, Ruby, Swift, Kotlin, Dart,
+  SQL, Shell/Bash, PowerShell, HTML, CSS, e mais.
+
+AÇÕES DISPONÍVEIS:
+  [✓] run_code       Executa código (com confirmação)
+  [✓] read_file      Lê arquivos do sistema
+  [✓] write_file     Escreve arquivos (com confirmação)
+  [✓] run_git        Comandos git (com confirmação)
+  [✓] save_note      Salva notas na memória
+
+MEMÓRIA:
+  [✓] Histórico de conversas (criptografado)
+  [✓] Contexto entre sessões
+  [✓] Isolado por disco — ninguém mais acessa
+
+EXECUÇÃO DE CÓDIGO:
+  Linguagens: python, javascript, typescript, bash, powershell
+  Timeout: 30 segundos
+  Sandbox: diretório temporário isolado
+  Rede: desabilitada por padrão
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
