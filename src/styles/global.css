@@ -123,9 +123,9 @@ body {
   pointer-events: none;
   background: radial-gradient(
     ellipse at 50% 48%,
-    transparent       45%,
-    rgba(0,0,0,.50)   75%,
-    rgba(0,0,0,.82)  100%
+    transparent       55%,
+    rgba(0,0,0,.28)   80%,
+    rgba(0,0,0,.50)  100%
   );
 }
 

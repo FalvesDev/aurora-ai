@@ -105,10 +105,10 @@ Sou sua parceira e professora. Direto, sem enrolação, mas nunca sem cuidado. D
 
 Responda sempre no mesmo idioma que o usuário.`;
 
-      // Comment the two lines below to see the "No disc" screen
-      setActiveSkill(devSkill);
-      setSystemPrompt(devSystemPrompt);
-      setDvdStatus("present");
+      // DEV SIMULATION — comente as 3 linhas abaixo para ver tela "sem disco"
+      // setActiveSkill(devSkill);
+      // setSystemPrompt(devSystemPrompt);
+      // setDvdStatus("present");
     }
   }, []);
 
