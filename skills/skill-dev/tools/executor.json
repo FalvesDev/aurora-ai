@@ -1,0 +1,41 @@
+{
+  "tools": [
+    {
+      "name": "run_code",
+      "description": "Execute a code snippet and return the output",
+      "requires_confirmation": true,
+      "confirmation_message": "Aurora wants to run the following code. Proceed?",
+      "timeout_ms": 30000,
+      "sandbox": {
+        "working_dir": "temp",
+        "network": false,
+        "max_output_bytes": 65536
+      },
+      "supported_languages": ["python", "javascript", "typescript", "bash", "powershell"]
+    },
+    {
+      "name": "read_file",
+      "description": "Read a file from the filesystem",
+      "requires_confirmation": false,
+      "max_file_size_bytes": 1048576
+    },
+    {
+      "name": "write_file",
+      "description": "Write content to a file",
+      "requires_confirmation": true,
+      "confirmation_message": "Aurora wants to write to: {path}. Proceed?"
+    },
+    {
+      "name": "run_git",
+      "description": "Execute a git command",
+      "requires_confirmation": true,
+      "confirmation_message": "Aurora wants to run: git {args}. Proceed?",
+      "allowed_commands": ["status", "log", "diff", "add", "commit", "branch", "checkout"]
+    },
+    {
+      "name": "save_note",
+      "description": "Save a note or snippet to the skill's memory",
+      "requires_confirmation": false
+    }
+  ]
+}

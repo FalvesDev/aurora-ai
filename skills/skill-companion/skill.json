@@ -1,0 +1,33 @@
+{
+  "skill_id": "companion",
+  "name": "COMPANION",
+  "version": "1.0.0",
+  "description": "Emotional support, active listening, reflection, and mental wellbeing",
+  "model": "mistral:7b",
+  "model_fallback": "llama3.1:8b",
+  "theme": {
+    "primary_color": "#FFB000",
+    "background_color": "#0D0800",
+    "accent_color": "#CC8800",
+    "font": "JetBrains Mono"
+  },
+  "capabilities": {
+    "run_code": false,
+    "read_files": false,
+    "write_files": true,
+    "git_commands": false,
+    "web_search": false,
+    "save_notes": true,
+    "journal": true
+  },
+  "memory": {
+    "enabled": true,
+    "encrypted": true,
+    "memory_file": "companion.enc",
+    "max_context_tokens": 4096
+  },
+  "thinking": {
+    "show_thinking": false,
+    "thinking_budget": 0
+  }
+}

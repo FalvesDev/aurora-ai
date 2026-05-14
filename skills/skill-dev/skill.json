@@ -1,0 +1,32 @@
+{
+  "skill_id": "dev",
+  "name": "DEV",
+  "version": "1.0.0",
+  "description": "Software development, debugging, architecture, and code review",
+  "model": "llama3.1:8b",
+  "model_fallback": "mistral:7b",
+  "theme": {
+    "primary_color": "#00FF41",
+    "background_color": "#0D0D0D",
+    "accent_color": "#00CC33",
+    "font": "JetBrains Mono"
+  },
+  "capabilities": {
+    "run_code": true,
+    "read_files": true,
+    "write_files": true,
+    "git_commands": true,
+    "web_search": false,
+    "save_notes": true
+  },
+  "memory": {
+    "enabled": true,
+    "encrypted": true,
+    "memory_file": "dev.enc",
+    "max_context_tokens": 4096
+  },
+  "thinking": {
+    "show_thinking": false,
+    "thinking_budget": 0
+  }
+}

@@ -1,0 +1,21 @@
+{
+  "tools": [
+    {
+      "name": "save_note",
+      "description": "Save an insight, decision, or action item",
+      "requires_confirmation": false
+    },
+    {
+      "name": "export_plan",
+      "description": "Export a structured plan or strategy as a text file",
+      "requires_confirmation": true,
+      "confirmation_message": "Aurora wants to save a plan to: {path}. Proceed?"
+    },
+    {
+      "name": "read_file",
+      "description": "Read a document, resume, or business plan you provide",
+      "requires_confirmation": false,
+      "max_file_size_bytes": 524288
+    }
+  ]
+}

@@ -1,0 +1,14 @@
+{
+  "tools": [
+    {
+      "name": "save_journal",
+      "description": "Save a journal entry with timestamp",
+      "requires_confirmation": false
+    },
+    {
+      "name": "save_note",
+      "description": "Save a reflection or insight",
+      "requires_confirmation": false
+    }
+  ]
+}
